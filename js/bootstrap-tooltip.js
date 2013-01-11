@@ -103,6 +103,34 @@
       }, self.options.delay.hide)
     }
 
+  , getPlacement: function () {
+      var pos = this.getPosition()
+        , tipEl = this.tip()[0]
+        , tipPos = $.extend({}, tipEl.getBoundingClientRect ? tipEl.getBoundingClientRect() : {
+            width: tipEl.offsetWidth
+          , height: tipEl.offsetHeight
+          }, this.tip().offset())
+        , gap = 20
+        , topGap = pos.top - $("body").scrollTop() - 40
+        , leftGap = pos.left - $("body").scrollLeft()
+        , rightGap = document.body.clientWidth - leftGap - pos.width
+
+      console.log({
+        pos: pos
+      , tipPos: tipPos
+      , topGap: topGap
+      , leftGap: leftGap
+      , rightGap: rightGap
+      })
+
+      if (topGap > tipPos.height + gap && leftGap > tipPos.width / 2 + gap && rightGap > tipPos.width / 2 + gap) return 'top'
+      if (topGap > tipPos.height / 2) {
+        if (rightGap > tipPos.width + gap) return 'right'
+        else if (leftGap > tipPos.width + gap) return 'left'
+      }
+      return 'bottom'
+    }
+
   , show: function () {
       var $tip
         , pos
@@ -132,6 +160,7 @@
 
         this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
 
+        if (placement == 'auto') placement = this.getPlacement()
         pos = this.getPosition()
 
         actualWidth = $tip[0].offsetWidth
