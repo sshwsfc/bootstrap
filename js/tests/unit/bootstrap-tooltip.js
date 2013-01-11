@@ -251,4 +251,17 @@ $(function () {
         ok(!$("#qunit-fixture > .tooltip").length, 'not found in parent')
         tooltip.tooltip('hide')
       })
+
+      test("should auto set tooltips placement top", function () {
+        var testDiv = $('<div style="margin-top: 100px; display:block;"></div>')
+          .appendTo('body')
+        var tooltip = $('<a href="#" rel="tooltip" title="Another tooltip"></a>')
+          .appendTo(testDiv)
+          .tooltip({placement:'auto'})
+          .tooltip('show')
+        console.log($(".tooltip").attr('class'))
+        ok($(".tooltip").is('.top'), 'placement is top')
+        //tooltip.tooltip('hide')
+        //testDiv.remove()
+      })
 })
